@@ -3,8 +3,12 @@
 namespace App\Services;
 
 use App\Models\AboutOutlet1;
+use App\Models\AboutOutlet2;
+use App\Models\AboutOutlet3;
 use App\Models\SellingDetailOutlet1;
 use App\Models\SellingOutlet1;
+use App\Models\SellingOutlet2;
+use App\Models\SellingOutlet3;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Number;
@@ -12,24 +16,54 @@ use Illuminate\Support\Number;
 class SellingOutletService
 {
 
+    protected $outlets = [
+        1 => [
+            'models' => 'App\Models\SellingOutlet1',
+        ],
+        2 => [
+            'models' => 'App\Models\SellingOutlet2',
+        ],
+        3 => [
+            'models' => 'App\Models\SellingOutlet3',
+        ],
+    ];
+
    public function generate(array $data)
    {
     $timezone = 'Asia/Jakarta';
-    $about = AboutOutlet1::first();
+
     $startDate = Carbon::parse($data['start_date'], $timezone)->setTimezone('UTC');
     $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('UTC');
 
-    $sellings = SellingOutlet1::query()
-    ->select()
-    ->with(
-        'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
-        'sellingDetails.product:id,name,initial_price,selling_price,sku',
-    )
-    ->when($data['start_date'] && $data['end_date'], function (Builder $query) use ($startDate, $endDate) {
-        $query->whereBetween('date', [$startDate, $endDate]);
-    })
-    ->orderBy('created_at', 'desc')
-    ->get();
+    $outletModels = [
+        1 => SellingOutlet1::query(),
+        2 => SellingOutlet2::query(),
+        3 => SellingOutlet3::query(),
+    ];
+
+    $aboutModels = [
+        1 => AboutOutlet1::query(),
+        2 => AboutOutlet2::query(),
+        3 => AboutOutlet3::query(),
+    ];
+
+    $about = $aboutModels[$data['outlet_id']]->first();
+
+    if (isset($outletModels[$data['outlet_id']])) {
+        $sellings = $outletModels[$data['outlet_id']]
+            ->select()
+            ->with(
+                'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
+                'sellingDetails.product:id,name,initial_price,selling_price,sku',
+            )
+            ->when(!empty($data['start_date']) && !empty($data['end_date']), function ($query) use ($data) {
+                $query->whereBetween('date', [$data['start_date'], $data['end_date']]);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+    } else {
+        $sellings = collect(); // Return an empty collection if `outlet_id` is not found
+    }
 
         $header = [
             'shop_name' => $about?->shop_name,

@@ -8,7 +8,7 @@ class AboutOutlet2 extends Model
 {
 
     protected $connection = 'mysql_2';
-    protected $table = 'about';
+    protected $table = 'abouts';
 
     protected $guarded = ['id'];
 }

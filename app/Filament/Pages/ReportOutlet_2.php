@@ -12,11 +12,11 @@ use Filament\Forms\Form;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
 
-class ReportOutlet_1 extends Page implements HasActions, HasForms
+class ReportOutlet_2 extends Page implements HasActions, HasForms
 {
     use InteractsWithFormActions, InteractsWithForms;
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
-    protected static ?string $navigationGroup = 'Outlet 1';
+    protected static ?string $navigationGroup = 'Outlet 2';
 
     protected static ?string $title = 'Report Penjualan';
 
@@ -31,7 +31,7 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
     public ?array $data = [
         'start_date' => null,
         'end_date' => null,
-        'outlet_id' => 1,
+        'outlet_id' => 2,
     ];
 
     public $reports = null;
