@@ -12,13 +12,13 @@
     </x-filament-panels::form>
 
     <div id="printable-element" class="max-w-full space-y-2">
-      {{-- @if($reports)
-        @include('reports.partials.selling-data', [
+      @if($reports)
+        @include('partials.selling-data', [
           'header' => $reports['header'],
           'reports' => $reports['reports'],
           'footer' => $reports['footer'],
         ])
-      @endif --}}
+      @endif
     </div>
 </x-filament-panels::page>
 @script()

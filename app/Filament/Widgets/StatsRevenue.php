@@ -44,7 +44,7 @@ class StatsRevenue extends BaseWidget
 
     private function getTotalRevenue1()
     {
-        $carbon = now();
+        $carbon = now()->timezone('Asia/Jakarta');
         $startOfDay = $carbon->startOfDay();
         $startOfYesterday = $startOfDay->copy()->subDay();
 
@@ -71,7 +71,7 @@ class StatsRevenue extends BaseWidget
     }
     private function getTotalRevenue2()
     {
-        $carbon = now();
+        $carbon = now()->timezone('Asia/Jakarta');
         $startOfDay = $carbon->startOfDay();
         $startOfYesterday = $startOfDay->copy()->subDay();
 
@@ -98,7 +98,7 @@ class StatsRevenue extends BaseWidget
     }
     private function getTotalRevenue3()
     {
-        $carbon = now();
+        $carbon = now()->timezone('Asia/Jakarta');
         $startOfDay = $carbon->startOfDay();
         $startOfYesterday = $startOfDay->copy()->subDay();
 
@@ -126,7 +126,7 @@ class StatsRevenue extends BaseWidget
 
     private function getAllTotalRevenue()
     {
-        $carbon = now();
+        $carbon = now()->timezone('Asia/Jakarta');
         $startOfDay = $carbon->startOfDay();
         $startOfYesterday = $startOfDay->copy()->subDay();
 

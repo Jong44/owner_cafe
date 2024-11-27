@@ -24,7 +24,7 @@ class SellingAllOutletService
 
     public function generate()
     {
-        $carbon = now();
+        $carbon = now()->timezone('Asia/Jakarta');
         $allReports = [];
 
 
@@ -90,9 +90,8 @@ class SellingAllOutletService
                         'created_at' => $selling->created_at,
                     ];
                 }
-            }
 
-            $totalCost += $totalCostPerSelling;
+                $totalCost += $totalCostPerSelling;
             $totalDiscount += ($selling->discount_price ?? 0);
             $totalGross += $totalBeforeDiscountPerSelling;
             $totalNet += $totalAfterDiscountPerSelling;
@@ -101,6 +100,9 @@ class SellingAllOutletService
             $totalGrossProfit += $totalGrossProfitPerSelling;
             $totalDiscountPerItem += $totalDiscountPerItem;
             $totalQty += $totalQtyPerSelling;
+            }
+
+
 
             usort($allReports, function ($a, $b) {
                 return $b['created_at'] <=> $a['created_at'];

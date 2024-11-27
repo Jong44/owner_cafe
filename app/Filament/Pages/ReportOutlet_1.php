@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Services\SellingOutletService;
 use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\DatePicker;
@@ -19,7 +20,25 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
 
     protected static ?string $title = 'Report Outlet 1';
 
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
+    {
+        return '';
+    }
+
     protected static string $view = 'filament.pages.report-outlet_1';
+
+
+    public ?array $data = [
+        'start_date' => null,
+        'end_date' => null,
+    ];
+
+    public $reports = null;
+
+    public function mount()
+    {
+        $this->generate(new SellingOutletService);
+    }
 
     public function form(Form $form): Form
     {
@@ -63,6 +82,38 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
                 ->icon('heroicon-o-arrow-down-on-square'),
         ];
     }
+
+    public function generate(SellingOutletService $sellingReportService)
+    {
+        $this->validate([
+            'data.start_date' => 'required',
+            'data.end_date' => 'required',
+        ]);
+
+        $this->reports = $sellingReportService->generate($this->data);
+    }
+
+    public function downloadPdf()
+    {
+        $this->validate([
+            'data.start_date' => 'required',
+            'data.end_date' => 'required',
+        ]);
+
+        return $this->redirectRoute('selling-report.generate', $this->data);
+    }
+
+    public function getColumnSpan (): int | string | array
+    {
+        return 'full';
+    }
+
+
+    public function getColumnStart (): int | string | array
+    {
+        return 'full';
+    }
+
 
 
 

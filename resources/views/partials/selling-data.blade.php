@@ -1,10 +1,13 @@
-<x-filament-widgets::widget>
-    <h1 class="text-2xl font-semibold text-gray-900">Laporan Penjualan Hari Ini</h1>
+<div>
+    <div class="text-center space-y-2">
+    <h1 class="text-3xl font-semibold">{{ __('Selling Report') }}</h1>
+    <h3 class="text-xl">{{ $header['shop_name'] }}</h3>
+  </div>
+  <p class="mb-4">{{ __('Period') }}: <b>{{ $header['start_date'] }} - {{ $header['end_date'] }}</b></p>
     <br>
     <table class="w-full text-left bg-white border border-gray-200 divide-y divide-gray-200 rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="p-4 text-center text-sm">Outlet</th>
                 <th class="p-4 text-center text-sm">SKU</th>
                 <th class="p-4 text-center text-sm">Nama Produk</th>
                 <th class="p-4 text-center text-sm">Harga Jual</th>
@@ -17,13 +20,12 @@
             </tr>
         </thead>
         <tbody>
-           @if ($reports['reports'])
-                @foreach ($reports['reports'] as $report)
+           @if ($reports)
+                @foreach ($reports as $report)
                     @php
                         $result = json_decode(json_encode($report));
                     @endphp
                     <tr>
-                        <td class="p-4 text-center text-sm">{{ $result->outlet }}</td>
                         <td class="p-4 text-center text-sm">{{ $result->sku }}</td>
                         <td class="p-4 text-center text-sm">{{ $result->name }}</td>
                         <td class="p-4 text-center text-sm">{{ $result->selling_price }}</td>
@@ -37,9 +39,9 @@
                 @endforeach
                 <tr class="border-t border-gray-200 dark:border-gray-700">
                     @php
-                        $footer = json_decode(json_encode($reports['footer']));
+                        $footer = json_decode(json_encode($footer));
                     @endphp
-                    <td class="p-4 text-center text-sm font-bold" colspan="4">Total</td>
+                    <td class="p-4 text-center text-sm font-bold" colspan="3">Total</td>
                     <td class="p-4 text-center text-sm font-bold">{{ $footer->total_qty }}</td>
                     <td class="p-4 text-center text-sm font-bold">{{ $footer->total_gross }}</td>
                     <td class="p-4 text-center text-sm font-bold">{{ $footer->total_discount_per_item }}</td>
@@ -49,7 +51,7 @@
                 </tr>
             @else
                 <tr>
-                    <td class="p-4 text-center text-sm font-bold" colspan="11">Belum ada penjualan hari ini</td>
+                    <td class="p-4 text-center text-base font-bold" colspan="10">Belum ada penjualan {{ __('Period') }}: <b>{{ $header['start_date'] }} - {{ $header['end_date'] }} </td>
                 </tr>
             @endif
         </tbody>
@@ -71,10 +73,10 @@
                 <th class="p-4 text-center text-sm">Keuntungan Bersih Setelah Diskon Penjualan</th>
             </tr>
         </thead>
-        @if ($reports['footer'])
+        @if ($footer)
             <tr>
                 @php
-                    $footer = json_decode(json_encode($reports['footer']));
+                    $footer = json_decode(json_encode($footer));
                 @endphp
                 <td class="p-4 text-center text-sm">{{ $footer->total_cost }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_gross }}</td>
@@ -87,4 +89,4 @@
             </tr>
         @endif
     </table>
-</x-filament-widgets::widget>
+</div>
