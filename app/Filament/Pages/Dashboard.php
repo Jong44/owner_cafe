@@ -14,6 +14,11 @@ class Dashboard extends BaseDashboard
 
     protected int | string | array $columnSpan = 'full';
 
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
+    {
+        return '';
+    }
+
     public function getColumns(): array|int|string
     {
         return 1;
