@@ -26,9 +26,8 @@ class StatsSelling extends BaseWidget
      private function getSalesToday()
     {
         $carbon = now()->timezone('Asia/Jakarta');
-        $today = $carbon->startOfDay()->format('Y-m-d H:i:s e');
-        $startDate = Carbon::parse($today)->setTimezone( 'Asia/Jakarta')->format('Y-m-d H:i:s e');
-
+        $today = $carbon->startOfDay();
+        $startDate = Carbon::parse($today)->setTimezone( 'Asia/Jakarta');
         $salesTodayOutlet1 = SellingOutlet1::whereDate('date', $startDate)->count() ?? 0;
         $salesTodayOutlet2 = SellingOutlet2::whereDate('date', $startDate)->count() ?? 0;
         $salesTodayOutlet3 = SellingOutlet3::whereDate('date', $startDate)->count() ?? 0;
