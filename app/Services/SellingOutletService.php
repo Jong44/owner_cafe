@@ -32,8 +32,8 @@ class SellingOutletService
    {
     $timezone = 'Asia/Jakarta';
 
-    $startDate = Carbon::parse($data['start_date'], $timezone)->setTimezone('UTC');
-    $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('UTC');
+    $startDate = Carbon::parse($data['start_date'], $timezone)->setTimezone('Asia/Jakarta');
+    $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('Asia/Jakarta');
 
     $outletModels = [
         1 => SellingOutlet1::query(),
@@ -49,6 +49,7 @@ class SellingOutletService
 
     $about = $aboutModels[$data['outlet_id']]->first();
 
+
     if (isset($outletModels[$data['outlet_id']])) {
         $sellings = $outletModels[$data['outlet_id']]
             ->select()
@@ -56,15 +57,16 @@ class SellingOutletService
                 'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
                 'sellingDetails.product:id,name,initial_price,selling_price,sku',
             )
-            ->when(!empty($data['start_date']) && !empty($data['end_date']), function ($query) use ($data) {
-                $query->whereBetween('date', [$data['start_date'], $data['end_date']]);
+            ->when($startDate, function (Builder $query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
             })
             ->orderBy('created_at', 'desc')
             ->get();
+
+        dd($sellings->toArray());
     } else {
         $sellings = collect(); // Return an empty collection if `outlet_id` is not found
     }
-
         $header = [
             'shop_name' => $about?->shop_name,
             'shop_location' => $about?->shop_location,
