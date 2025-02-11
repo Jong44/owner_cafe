@@ -11,6 +11,9 @@ class SellingReportController extends Controller
 {
     public function __invoke(Request $request, SellingOutletService $sellingReportService)
     {
+        ini_set("memory_limit", "512M");
+        ini_set("max_execution_time", "300");
+
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
