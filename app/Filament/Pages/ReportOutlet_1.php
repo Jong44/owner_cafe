@@ -110,6 +110,7 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
+        $this->tax = (float) SettingOutlet1::get('default_tax', 0);
         return $this->redirectRoute('selling-report.generate', $this->data);
     }
 

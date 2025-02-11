@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SettingOutlet1;
 use App\Services\SellingOutletService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -15,12 +16,15 @@ class SellingReportController extends Controller
             'end_date' => 'nullable|date',
         ]);
 
+        $tax_data = (float) SettingOutlet1::get('default_tax', 0);
+
         $reportData = $sellingReportService->generate($request->all());
         $reports = $reportData['reports'];
         $footer = $reportData['footer'];
         $header = $reportData['header'];
+        $tax = $tax_data;
 
-        $pdf = Pdf::loadView('partials.selling', compact('reports', 'footer', 'header'))
+        $pdf = Pdf::loadView('partials.selling', compact('reports', 'footer', 'header', 'tax'))
             ->setPaper('a4', 'landscape');
         $pdf->output();
         $domPdf = $pdf->getDomPDF();

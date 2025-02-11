@@ -51,8 +51,8 @@ class SellingOutletService
 
     $about = $aboutModels[$data['outlet_id']]->first();
 
-
     if (isset($outletModels[$data['outlet_id']])) {
+
         $sellings = $outletModels[$data['outlet_id']]
             ->select()
             ->with(
@@ -64,7 +64,6 @@ class SellingOutletService
             })
             ->orderBy('created_at', 'desc')
             ->get();
-
     } else {
         $sellings = collect(); // Return an empty collection if `outlet_id` is not found
     }
