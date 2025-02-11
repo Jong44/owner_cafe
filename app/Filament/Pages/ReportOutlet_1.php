@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\SettingOutlet1;
 use App\Services\SellingOutletService;
 use Filament\Actions\Action;
 use Filament\Actions\Contracts\HasActions;
@@ -19,6 +20,9 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
     protected static ?string $navigationGroup = 'Outlet 1';
 
     protected static ?string $title = 'Report Penjualan';
+
+
+    public float $tax;
 
     public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
     {
@@ -38,7 +42,7 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
 
     public function mount()
     {
-        $this->generate(new SellingOutletService);
+
     }
 
     public function form(Form $form): Form
@@ -90,8 +94,14 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
-
+        $this->tax = (float) SettingOutlet1::get('default_tax', 0);
         $this->reports = $sellingReportService->generate($this->data);
+        $this->reports = array_merge(
+            $this->reports,
+            [
+            'tax' => $this->tax,
+            ]
+            );
     }
 
     public function downloadPdf()
@@ -100,7 +110,6 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
-
         return $this->redirectRoute('selling-report.generate', $this->data);
     }
 

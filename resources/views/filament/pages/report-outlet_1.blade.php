@@ -17,6 +17,7 @@
           'header' => $reports['header'],
           'reports' => $reports['reports'],
           'footer' => $reports['footer'],
+          'tax' => $reports['tax']
         ])
       @endif
     </div>

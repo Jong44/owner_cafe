@@ -9,12 +9,14 @@ use App\Models\SellingDetailOutlet1;
 use App\Models\SellingOutlet1;
 use App\Models\SellingOutlet2;
 use App\Models\SellingOutlet3;
+use App\Models\SettingOutlet1;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Number;
 
 class SellingOutletService
 {
+
 
     protected $outlets = [
         1 => [
@@ -63,7 +65,6 @@ class SellingOutletService
             ->orderBy('created_at', 'desc')
             ->get();
 
-        dd($sellings->toArray());
     } else {
         $sellings = collect(); // Return an empty collection if `outlet_id` is not found
     }

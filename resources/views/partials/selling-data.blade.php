@@ -67,6 +67,7 @@
                 <th class="p-4 text-center text-sm">Discount per Penjualan</th>
                 <th class="p-4 text-center text-sm">Discount per Item</th>
                 <th class="p-4 text-center text-sm">Penjualan Setelah Discount</th>
+                <th class="p-4 text-center text-sm">Penjualan Setelah Pajak</th>
                 <th class="p-4 text-center text-sm">Keuntungan Kotor</th>
                 <th class="p-4 text-center text-sm">Keuntungan Bersih Sebelum Diskon Penjualan</th>
                 <th class="p-4 text-center text-sm">Keuntungan Bersih Setelah Diskon Penjualan</th>
@@ -76,12 +77,16 @@
             <tr>
                 @php
                     $footer = json_decode(json_encode($footer));
+                    $total_net_float = (float) str_replace(',', '', $footer->total_net);
+                    $tax_price = $total_net_float + ($total_net_float * $tax / 100);
+                    $tax_price = number_format($tax_price, 0, ',', ',');
                 @endphp
                 <td class="p-4 text-center text-sm">{{ $footer->total_cost }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_gross }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_discount }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_discount_per_item }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net }}</td>
+                <td class="p-4 text-center text-sm">{{ $tax_price}}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_gross_profit }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net_profit_before_discount_selling }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net_profit_after_discount_selling }}</td>
