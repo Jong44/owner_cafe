@@ -17,7 +17,7 @@
           'header' => $reports['header'],
           'reports' => $reports['reports'],
           'footer' => $reports['footer'],
-          'tax' => $reports['tax']
+          'tax' => $reports['tax'] ?? 0,
         ])
       @endif
     </div>

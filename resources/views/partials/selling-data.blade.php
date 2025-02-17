@@ -67,7 +67,9 @@
                 <th class="p-4 text-center text-sm">Discount per Penjualan</th>
                 <th class="p-4 text-center text-sm">Discount per Item</th>
                 <th class="p-4 text-center text-sm">Penjualan Setelah Discount</th>
-                <th class="p-4 text-center text-sm">Penjualan Setelah Pajak</th>
+                @if ($tax)
+                    <th class="p-4 text-center text-sm">Penjualan Setelah Pajak</th>
+                @endif
                 <th class="p-4 text-center text-sm">Keuntungan Kotor</th>
                 <th class="p-4 text-center text-sm">Keuntungan Bersih Sebelum Diskon Penjualan</th>
                 <th class="p-4 text-center text-sm">Keuntungan Bersih Setelah Diskon Penjualan</th>
@@ -86,7 +88,9 @@
                 <td class="p-4 text-center text-sm">{{ $footer->total_discount }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_discount_per_item }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net }}</td>
+                @if ($tax)
                 <td class="p-4 text-center text-sm">{{ $tax_price}}</td>
+                @endif
                 <td class="p-4 text-center text-sm">{{ $footer->total_gross_profit }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net_profit_before_discount_selling }}</td>
                 <td class="p-4 text-center text-sm">{{ $footer->total_net_profit_after_discount_selling }}</td>
