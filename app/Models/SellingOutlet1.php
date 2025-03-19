@@ -11,7 +11,6 @@ class SellingOutlet1 extends Model
     protected $connection = 'mysql_1';
     protected $table = 'sellings';
 
-
     protected $appends = [
         'grand_total_price',
     ];
@@ -20,6 +19,13 @@ class SellingOutlet1 extends Model
     {
         return $this->hasMany(SellingDetailOutlet1::class, 'selling_id', 'id');
     }
+
+    // Define the relationship with the PaymentMethod model
+    public function paymentMethod()
+{
+    return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+}
+
 
     public function scopeIsPaid(Builder $builder): Builder
     {

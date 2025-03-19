@@ -19,7 +19,10 @@ class SellingOutlet3 extends Model
     {
         return $this->hasMany(SellingDetailOutlet3::class, 'selling_id', 'id');
     }
-
+    public function paymentMethod()
+{
+    return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+}
     public function scopeIsPaid(Builder $builder): Builder
     {
         return $builder->where('is_paid', true);

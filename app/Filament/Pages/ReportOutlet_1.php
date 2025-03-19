@@ -16,21 +16,15 @@ use Filament\Pages\Page;
 class ReportOutlet_1 extends Page implements HasActions, HasForms
 {
     use InteractsWithFormActions, InteractsWithForms;
+    
     protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
     protected static ?string $navigationGroup = 'Outlet 1';
 
     protected static ?string $title = 'Report Penjualan';
 
-
     public float $tax;
 
-    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
-    {
-        return '';
-    }
-
     protected static string $view = 'filament.pages.report-outlet_1';
-
 
     public ?array $data = [
         'start_date' => null,
@@ -42,7 +36,7 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
 
     public function mount()
     {
-
+        // Initial setup if needed
     }
 
     public function form(Form $form): Form
@@ -51,7 +45,6 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             DatePicker::make('start_date')
                 ->translateLabel()
                 ->date()
-                ->translateLabel()
                 ->required()
                 ->closeOnDateSelection()
                 ->default(now())
@@ -59,14 +52,13 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             DatePicker::make('end_date')
                 ->translateLabel()
                 ->date()
-                ->translateLabel()
-                ->closeOnDateSelection()
                 ->required()
+                ->closeOnDateSelection()
                 ->default(now())
                 ->native(false),
         ])
-            ->columns(2)
-            ->statePath('data');
+        ->columns(2)
+        ->statePath('data');
     }
 
     public function getFormActions(): array
@@ -94,14 +86,20 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
+
+        // Getting tax settings from database
         $this->tax = (float) SettingOutlet1::get('default_tax', 0);
+
+        // Generate the report using the SellingOutletService
         $this->reports = $sellingReportService->generate($this->data);
+
+        // Add tax information to the reports
         $this->reports = array_merge(
             $this->reports,
             [
-            'tax' => $this->tax,
+                'tax' => $this->tax, // Adding tax value to reports
             ]
-            );
+        );
     }
 
     public function downloadPdf()
@@ -110,22 +108,20 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
+
         $this->tax = (float) SettingOutlet1::get('default_tax', 0);
+
+        // Here you can implement your PDF generation logic, or redirect for download
         return $this->redirectRoute('selling-report.generate', $this->data);
     }
 
-    public function getColumnSpan (): int | string | array
+    public function getColumnSpan(): int | string | array
     {
         return 'full';
     }
 
-
-    public function getColumnStart (): int | string | array
+    public function getColumnStart(): int | string | array
     {
         return 'full';
     }
-
-
-
-
 }
