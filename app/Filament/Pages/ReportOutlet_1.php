@@ -108,14 +108,27 @@ class ReportOutlet_1 extends Page implements HasActions, HasForms
             'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
-
+    
         $this->tax = (float) SettingOutlet1::get('default_tax', 0);
-
-        // Here you can implement your PDF generation logic, or redirect for download
-        return $this->redirectRoute('selling-report.generate', $this->data);
+        $this->reports = app(SellingOutletService::class)->generate($this->data);
+        $footer = $this->reports['footer'] ?? [];
+        $header = array_merge($this->data, ['shop_name' => 'Nama Toko Outlet 1']);
+    
+        $pdf = \PDF::loadView('filament.pages.report-outlet_1_pdf', [
+            'header'  => $header,
+            'reports' => $this->reports['reports'] ?? [],
+            'footer'  => $footer,
+            'tax'     => $this->tax,
+        ]);
+    
+        $fileName = 'report_penjualan.pdf';
+        $filePath = storage_path('app/public/' . $fileName);
+        $pdf->save($filePath);
+    
+        // Pastikan folder public/storage sudah di-link (php artisan storage:link)
+        return redirect()->to(asset('storage/' . $fileName));
     }
-
-    public function getColumnSpan(): int | string | array
+        public function getColumnSpan(): int | string | array
     {
         return 'full';
     }
