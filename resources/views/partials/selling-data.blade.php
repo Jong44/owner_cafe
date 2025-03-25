@@ -14,8 +14,8 @@
                 <th class="p-4 text-center text-sm">Harga Jual</th>
                 <th class="p-4 text-center text-sm">Qty</th>
                 <th class="p-4 text-center text-sm">Penjualan</th>
-                <th class="p-4 text-center text-sm">Discount per Item</th>
-                <th class="p-4 text-center text-sm">Penjualan Setelah Discount</th>
+                <th class="p-4 text-center text-sm">Diskon per Item</th>
+                <th class="p-4 text-center text-sm">Penjualan Setelah Diskon</th>
                 <th class="p-4 text-center text-sm">Gross Profit</th>
                 <th class="p-4 text-center text-sm">Net Profit</th>
                 <th class="p-4 text-center text-sm">Metode Pembayaran</th>
@@ -25,7 +25,6 @@
             @if ($reports)
                 @foreach ($reports as $report)
                     @php
-                        // Pastikan $report berbentuk object
                         $result = json_decode(json_encode($report));
                     @endphp
                     <tr>
@@ -41,19 +40,26 @@
                         <td class="p-4 text-center text-sm">{{ $result->payment_method }}</td>
                     </tr>
                 @endforeach
-                <tr class="border-t border-gray-200 dark:border-gray-700">
-                    @php
-                        // Pastikan $footer berbentuk object
-                        $footer = json_decode(json_encode($footer));
-                    @endphp
-                    <td class="p-4 text-center text-sm font-bold" colspan="3">Total</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_qty }}</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_gross }}</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_discount_per_item }}</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_net }}</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_gross_profit }}</td>
-                    <td class="p-4 text-center text-sm font-bold">{{ $footer->total_net_profit_before_discount_selling }}</td>
-                    <td></td>
+
+                <!-- Baris Total -->
+                @php
+                    $footer = json_decode(json_encode($footer));
+                @endphp
+                <tr class="border-t border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 font-bold">
+                    <td class="p-4 text-center text-sm" colspan="3">Total</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_qty }}</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_gross }}</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_discount_per_item }}</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_net }}</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_gross_profit }}</td>
+                    <td class="p-4 text-center text-sm">{{ $footer->total_net_profit_after_discount_selling }}</td>
+                    <td class="p-4 text-center text-sm">-</td>
+                </tr>
+
+                <!-- Tambahan Baris: Diskon Transaksi -->
+                <tr class="bg-gray-100 dark:bg-gray-700 font-semibold">
+                    <td colspan="5" class="p-4 text-sm text-right">Diskon Transaksi</td>
+                    <td colspan="5" class="p-4 text-left text-sm">{{ $footer->total_discount }}</td>
                 </tr>
             @else
                 <tr>
@@ -79,18 +85,14 @@
                 <th class="p-4 text-center text-sm">Total dengan Pajak</th>
             </tr>
         </thead>
-        
         <tbody>
-         
-
             @foreach ($footer->payment_method_totals as $paymentMethod => $totals)
-    <tr>
-        <td class="p-4 text-center text-sm">{{ $paymentMethod }}</td>
-        <td class="p-4 text-center text-sm">{{ 'Rp ' . number_format($totals->total_sales, 0, ',', '.') }}</td>
-        <td class="p-4 text-center text-sm">{{ 'Rp ' . number_format($totals->total_with_tax, 0, ',', '.') }}</td>
-    </tr>
-@endforeach
-
+                <tr>
+                    <td class="p-4 text-center text-sm">{{ $paymentMethod }}</td>
+                    <td class="p-4 text-center text-sm">{{ 'Rp ' . number_format($totals->total_sales, 0, ',', '.') }}</td>
+                    <td class="p-4 text-center text-sm">{{ 'Rp ' . number_format($totals->total_with_tax, 0, ',', '.') }}</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
